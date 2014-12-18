@@ -4,8 +4,12 @@
   "description": "ampersand collection mixin based on rest collection mixin to be used with socket.io",
   "main": "ampersand-collection-io-mixin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "node_modules/.bin/jshint -c .jshintrc ampersand-io-collection-mixin.js"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/JGAntunes/ampersand-collection-io-mixin"
@@ -21,5 +25,17 @@
   "bugs": {
     "url": "https://github.com/JGAntunes/ampersand-collection-io-mixin/issues"
   },
-  "homepage": "https://github.com/JGAntunes/ampersand-collection-io-mixin"
+  "homepage": "https://github.com/JGAntunes/ampersand-collection-io-mixin",
+  "dependencies": {
+    "extend-object": "^1.0.0",
+    "socket.io-client": "^1.2.1"
+  },
+  "devDependencies": {
+    "browserify": "^7.0.1",
+    "jshint": "~2.5.10",
+    "pre-commit": "https://github.com/jgantunes/pre-commit/tarball/master",
+    "tap-spec": "^2.1.2",
+    "tape": "^3.0.3",
+    "tape-run": "^0.3.0"
+  }
 }
