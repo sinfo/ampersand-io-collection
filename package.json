@@ -5,7 +5,7 @@
   "main": "ampersand-collection-io-mixin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "node_modules/.bin/jshint -c .jshintrc ampersand-io-collection-mixin.js"
+    "lint": "node_modules/.bin/jshint -c .jshintrc ampersand-collection-io-mixin.js"
   },
   "pre-commit": [
     "lint"
