@@ -129,23 +129,29 @@ module.exports = {
     }
   },
 
-  // setListener: function (listeners){
-    // if(!listeners){
-      // listeners = this.listeners;
-    // }
-    // for()
-    // var self = this;
-    // this.socket.on(this.events.onUpdate, 
-    // this.socket.on(this.events.onNew, )
-  // },
-// 
-  // removeListener: function (){
-// 
-  // },
+  setListeners: function (listeners){
+    if(!listeners){
+      listeners = Object.keys(this.listeners);
+    }
+    for(var i = 0; i < listeners.size(); i++){
+      var listener = listeners[i];
+      this.socket.on(listener, this.listeners[listener]);
+    }
+  },
+
+  removeListeners: function (listeners){
+    if(!listeners){
+      listeners = Object.keys(this.listeners);
+    }
+    for(var i = 0; i < listeners.size(); i++){
+      var listener = listeners[i];
+      this.socket.removeListener(listener, this.listeners[listener]);
+    }
+  },
   // Overridable function responsible for emitting the events
   emit: function (event, model, options){
     this.socket.emit(event, model, options.callback);
-  }
+  },
 
 };
 
