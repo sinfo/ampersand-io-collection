@@ -3,17 +3,6 @@ var io = require('socket.io-client');
 
 module.exports = {
 
-  socket: io('http://localhost:3000'),
-
-  // The name of the events to be used in each operation
-  events: {
-    create: 'model-create',
-    update: 'model-update',
-    fetch: 'model-fetch',
-    remove: 'model-remove',
-    response: 'model-response'
-  },
-
   // Fetch the default set of models for this collection, resetting the
   // collection when they arrive. If `reset: true` is passed, the response
   // data will be passed through the `reset` method instead of `set`.
@@ -119,11 +108,45 @@ module.exports = {
     });
   },
 
+  socket: io('http://localhost:3000'),
+
+  // The name of the events to be used in each operation
+  events: {
+    onNew: 'on-model-new',
+    onUpdate: 'on-model-update',
+    fetch: 'collection-fetch'
+  },
+
+  listeners: {
+    onUpdate: function(data, cb){
+      var model = this.get(data.id);
+      model.save(data, null);
+      return cb();
+    },
+    onNew: function(data, cb){
+      this.create(data,{});
+      return cb();
+    }
+  },
+
+  // setListener: function (listeners){
+    // if(!listeners){
+      // listeners = this.listeners;
+    // }
+    // for()
+    // var self = this;
+    // this.socket.on(this.events.onUpdate, 
+    // this.socket.on(this.events.onNew, )
+  // },
+// 
+  // removeListener: function (){
+// 
+  // },
   // Overridable function responsible for emitting the events
   emit: function (event, model, options){
     this.socket.emit(event, model, options.callback);
   }
-  
+
 };
 
 // Aux func used to trigger errors if they exist and use the optional
