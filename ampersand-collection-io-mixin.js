@@ -1,7 +1,7 @@
 var extend = require('extend-object');
 var io = require('socket.io-client');
 
-module.exports = {
+var IOMixin = {
 
   // Fetch the default set of models for this collection, resetting the
   // collection when they arrive. If `reset: true` is passed, the response
@@ -14,15 +14,22 @@ module.exports = {
     var collection = this;
 
     options.cb = options.callback;
-    options.callback = function cb(err, result){
-      var method = options.reset ? 'reset' : 'set';
+    options.callback = function (err, resp){
       if (err){
-        return callback(err, collection, result, options);
+        this.trigger('error', this, resp, options);
       }
-      collection[method](result, options);
-      callback(null, collection, result, options);
+    };
+    options.respCallback = function cb(data){
+      var method = options.reset ? 'reset' : 'set';
+      if (data.err){
+        return callback(data.err, collection, data, options);
+      }
+      collection[method](data.resp, options);
+      callback(data.err, collection, data, options);
+      collection.removeListeners([collection.events.onFetch]);
     };
 
+    this.addListeners({listener: this.events.onFetch, fn: options.respCallback, active: true});
     this.emit(this.events.fetch, this, options);
     return collection;
   },
@@ -40,14 +47,14 @@ module.exports = {
     }
     var collection = this;
     options.cb = options.callback;
-    options.callback = function cb(err, model, result){
+    options.callback = function cb(err, model, resp){
       if (err){
-        return callback(err, model, result, options);
+        return callback(err, model, resp, options);
       }
       if (options.wait){
         collection.add(model, options);
       }
-      callback(null, model, result, options);
+      callback(null, model, resp, options);
     };
 
     model.save(null, options);
@@ -114,18 +121,45 @@ module.exports = {
   events: {
     onNew: 'on-model-new',
     onUpdate: 'on-model-update',
-    fetch: 'collection-fetch'
+    fetch: 'collection-fetch',
+    onFetch: 'fetch-response'
   },
 
   listeners: {
-    onUpdate: function(data, cb){
-      var model = this.get(data.id);
-      model.save(data, null);
-      return cb();
+    onUpdate:{ 
+      fn: function(data, cb){
+        var model = this.get(data.id);
+        model.save(data, null);
+        return cb();
+      },
+      active: false,
     },
-    onNew: function(data, cb){
-      this.create(data,{});
-      return cb();
+    onNew: {
+      fn: function(data, cb){
+        this.create(data,{});
+        return cb();
+      },
+      active: false,
+    }
+  },
+
+  addListeners: function(){
+    for(var i = 0; i < arguments.length; i++){
+      var l = arguments[i];
+      if(this.listeners[l.listener] && this.listeners[l.listener].active){
+        console.log('listener already active');
+        continue;
+      }
+      if(l.listener && l.fn && typeof(l.fn) == 'function'){
+        this.listeners[l.listener] = {fn: l.fn};
+      }
+      if(l.active){
+        this.socket.on(l.listener, this.listeners[l.listener].fn);
+        this.listeners[l.listener].active = true;
+      }
+      else{
+        this.listeners[l.listener].active = false;
+      }
     }
   },
 
@@ -133,9 +167,12 @@ module.exports = {
     if(!listeners){
       listeners = Object.keys(this.listeners);
     }
-    for(var i = 0; i < listeners.size(); i++){
+    for(var i = 0; i < listeners.length; i++){
       var listener = listeners[i];
-      this.socket.on(listener, this.listeners[listener]);
+      if(!this.listeners[listener].active){
+        this.socket.on(listener, this.listeners[listener].fn);
+        this.listeners[listener].active = true;
+      }
     }
   },
 
@@ -143,9 +180,13 @@ module.exports = {
     if(!listeners){
       listeners = Object.keys(this.listeners);
     }
-    for(var i = 0; i < listeners.size(); i++){
+    for(var i = 0; i < listeners.length; i++){
       var listener = listeners[i];
-      this.socket.removeListener(listener, this.listeners[listener]);
+      console.log(listener);
+      if(this.listeners[listener].active){
+        this.socket.removeListener(listener, this.listeners[listener].fn);
+        this.listeners[listener].active = false;
+      }
     }
   },
   // Overridable function responsible for emitting the events
@@ -157,11 +198,18 @@ module.exports = {
 
 // Aux func used to trigger errors if they exist and use the optional
 // callback function if given
-var callback = function(err, model, result, options){
+var callback = function(err, model, resp, options){
   if (options.cb){
-    options.cb(err, model, result);
+    options.cb(model, resp);
   }
   if (err){
     model.trigger('error', model, err, options);
   }
 };
+
+var IOCollection = function(){
+};
+
+extend(IOCollection.prototype, IOMixin);
+
+module.exports = IOCollection;
