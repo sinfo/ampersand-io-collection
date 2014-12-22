@@ -4,6 +4,31 @@ var AmpersandIO = require('ampersand-io');
 
 var AmpersandCollectionIO = AmpersandIO.extend({
 
+  events: {
+    fetch: 'collection-fetch',
+    onFetch: 'fetch-response',
+    onUpdate: 'on-model-update',
+    onNew: 'on-model-new'
+  },
+
+  listeners: {
+    onUpdate:{ 
+      fn: function(data, cb){
+        var model = this.get(data.id);
+        model.save(data, null);
+        return cb();
+      },
+      active: false,
+    },
+    onNew: {
+      fn: function(data, cb){
+        this.create(data,{});
+        return cb();
+      },
+      active: false,
+    }
+  },
+
   // Fetch the default set of models for this collection, resetting the
   // collection when they arrive. If `reset: true` is passed, the response
   // data will be passed through the `reset` method instead of `set`.
@@ -128,5 +153,7 @@ var callback = function(err, model, resp, options){
     model.trigger('error', model, err, options);
   }
 };
+
+console.log(AmpersandCollectionIO);
 
 module.exports = AmpersandCollectionIO;
