@@ -1,3 +1,4 @@
+/*$AMPERSAND_VERSION*/
 var extend = require('extend-object');
 var AmpersandExtend = require('ampersand-class-extend');
 var AmpersandIO = require('ampersand-io');
@@ -153,7 +154,5 @@ var callback = function(err, model, resp, options){
     model.trigger('error', model, err, options);
   }
 };
-
-console.log(AmpersandCollectionIO);
 
 module.exports = AmpersandCollectionIO;
