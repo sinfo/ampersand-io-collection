@@ -28,7 +28,6 @@
   "homepage": "https://github.com/JGAntunes/ampersand-collection-io-mixin",
   "dependencies": {
     "extend-object": "^1.0.0",
-    "socket.io-client": "^1.2.1",
     "ampersand-class-extend": "^1.0.1",
     "ampersand-io": "https://github.com/jgantunes/ampersand-io/tarball/master"
   },
