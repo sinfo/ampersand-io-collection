@@ -6,7 +6,7 @@ var AmpersandCollectionIO = AmpersandIO.extend({
 
   events: {
     fetch: 'collection-fetch',
-    onFetch: 'fetch-response',
+    onFetch: 'on-collection-fetch',
     onUpdate: 'on-model-update',
     onNew: 'on-model-new'
   },

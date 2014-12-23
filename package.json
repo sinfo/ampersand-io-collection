@@ -28,13 +28,13 @@
   "homepage": "https://github.com/JGAntunes/ampersand-collection-io-mixin",
   "dependencies": {
     "extend-object": "^1.0.0",
-    "socket.io-client": "^1.2.1"
+    "socket.io-client": "^1.2.1",
+    "ampersand-class-extend": "^1.0.1",
+    "ampersand-io": "https://github.com/jgantunes/ampersand-io/tarball/master"
   },
   "devDependencies": {
-    "ampersand-class-extend": "^1.0.1",
     "ampersand-collection": "^1.3.17",
     "ampersand-io-model": "https://github.com/jgantunes/ampersand-io-model/tarball/master",
-    "ampersand-io": "https://github.com/jgantunes/ampersand-io/tarball/master",
     "browserify": "^7.0.1",
     "jshint": "~2.5.10",
     "pre-commit": "https://github.com/jgantunes/pre-commit/tarball/master",
