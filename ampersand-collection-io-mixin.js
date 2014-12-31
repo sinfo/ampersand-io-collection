@@ -19,14 +19,21 @@ var AmpersandCollectionIO = AmpersandIO.extend({
         model.save(data, null);
         return cb();
       },
-      active: false,
+      active: false
     },
     onNew: {
       fn: function(data, cb){
         this.create(data,{});
         return cb();
       },
-      active: false,
+      active: false
+    },
+    onFetch: {
+      fn: function(data, cb){
+        this.set(data);
+        return cb();
+      },
+      active: true
     }
   },
 
