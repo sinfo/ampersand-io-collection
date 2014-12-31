@@ -170,6 +170,7 @@ var callback = function(err, model, resp, options){
 
 var Base = AmpersandCollection.extend();
 AmpersandIOCollection.prototype = Object.create(Base.prototype);
+extend(AmpersandIOCollection.prototype, Object.create(IOMixin.prototype));
 AmpersandIOCollection.extend = Base.extend;
 
 module.exports = AmpersandIOCollection;
