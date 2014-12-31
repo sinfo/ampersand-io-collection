@@ -33,7 +33,7 @@ var AmpersandCollectionIO = AmpersandIO.extend({
         this.set(data);
         return cb();
       },
-      active: true
+      active: false
     }
   },
 
