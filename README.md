@@ -1,2 +1,2 @@
-ampersand-collection-io-mixin
+ampersand-io-collection
 =============================

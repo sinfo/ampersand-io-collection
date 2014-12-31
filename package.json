@@ -1,18 +1,18 @@
 {
-  "name": "ampersand-collection-io-mixin",
+  "name": "ampersand-io-collection",
   "version": "0.1.0",
   "description": "ampersand collection mixin based on rest collection mixin to be used with socket.io",
-  "main": "ampersand-collection-io-mixin.js",
+  "main": "ampersand-io-collection.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "node_modules/.bin/jshint -c .jshintrc ampersand-collection-io-mixin.js"
+    "lint": "node_modules/.bin/jshint -c .jshintrc ampersand-io-collection.js"
   },
   "pre-commit": [
     "lint"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/JGAntunes/ampersand-collection-io-mixin"
+    "url": "https://github.com/JGAntunes/ampersand-io-collection"
   },
   "keywords": [
     "ampersand",
@@ -23,9 +23,9 @@
   "author": "Joao Antunes <j.goncalo.antunes@gmail.com> (http://github.com/JGAntunes)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JGAntunes/ampersand-collection-io-mixin/issues"
+    "url": "https://github.com/JGAntunes/ampersand-io-collection/issues"
   },
-  "homepage": "https://github.com/JGAntunes/ampersand-collection-io-mixin",
+  "homepage": "https://github.com/JGAntunes/ampersand-io-collection",
   "dependencies": {
     "extend-object": "^1.0.0",
     "ampersand-collection": "~1.3.17",

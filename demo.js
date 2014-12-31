@@ -1,6 +1,6 @@
 var io = require('socket.io')();
 var IOModel = require('ampersand-io-model');
-var IOCollection = require('ampersand-collection-io-mixin');
+var IOCollection = require('./ampersand-io-collection');
 var AmpersandCollection = require('ampersand-collection');
 
 io.on('connection', function(socket){
