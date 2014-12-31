@@ -1,9 +1,14 @@
 /*$AMPERSAND_VERSION*/
 var extend = require('extend-object');
-var AmpersandExtend = require('ampersand-class-extend');
+var AmpersandCollection = require('ampersand-collection');
 var AmpersandIO = require('ampersand-io');
 
-var AmpersandCollectionIO = AmpersandIO.extend({
+function AmpersandIOCollection(attrs, options){
+  Base.call(this, attrs, options);
+  IOMixin.call(this, options);
+}
+
+var IOMixin = AmpersandIO.extend({
 
   events: {
     fetch: 'collection-fetch',
@@ -162,4 +167,8 @@ var callback = function(err, model, resp, options){
   }
 };
 
-module.exports = AmpersandCollectionIO;
+var Base = AmpersandCollection.extend();
+AmpersandIOCollection.prototype = Object.create(Base.prototype);
+AmpersandIOCollection.extend = Base.extend;
+
+module.exports = AmpersandIOCollection;
