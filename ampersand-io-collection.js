@@ -45,6 +45,8 @@ var IOMixin = AmpersandIO.extend({
       options.parse = true;
     }
     var collection = this;
+    var listener = {};
+    var listenerKey;
 
     options.cb = options.callback;
     options.callback = function (err, response){
@@ -52,6 +54,7 @@ var IOMixin = AmpersandIO.extend({
         this.trigger('error', this, response, options);
       }
     };
+
     options.respCallback = function cb(data, cbServer){
       var method = options.reset ? 'reset' : 'set';
       if(data.err){
@@ -65,7 +68,9 @@ var IOMixin = AmpersandIO.extend({
       }
     };
 
-    this.addListeners({listener: this.events.onFetch, fn: options.respCallback, active: true});
+    listenerKey = this.events.onFetch;
+    listener[listenerKey] = {fn: options.respCallback, active: true};
+    this.addListeners(listener);
     this.emit(this.events.fetch, this, options);
     return collection;
   },
