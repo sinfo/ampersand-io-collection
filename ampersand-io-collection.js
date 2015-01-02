@@ -33,13 +33,6 @@ var IOMixin = AmpersandIO.extend({
         return cb();
       },
       active: false
-    },
-    onFetch: {
-      fn: function(data, cb){
-        this.set(data);
-        return cb();
-      },
-      active: false
     }
   },
 
@@ -54,19 +47,22 @@ var IOMixin = AmpersandIO.extend({
     var collection = this;
 
     options.cb = options.callback;
-    options.callback = function (err, resp){
+    options.callback = function (err, response){
       if (err){
-        this.trigger('error', this, resp, options);
+        this.trigger('error', this, response, options);
       }
     };
-    options.respCallback = function cb(data){
+    options.respCallback = function cb(data, cbServer){
       var method = options.reset ? 'reset' : 'set';
-      if (data.err){
+      if(data.err){
         return callback(data.err, collection, data, options);
       }
-      collection[method](data.resp, options);
+      collection[method](data.response, options);
       callback(data.err, collection, data, options);
       collection.removeListeners([collection.events.onFetch]);
+      if(cbServer){
+        cbServer();
+      }
     };
 
     this.addListeners({listener: this.events.onFetch, fn: options.respCallback, active: true});
@@ -87,14 +83,14 @@ var IOMixin = AmpersandIO.extend({
     }
     var collection = this;
     options.cb = options.callback;
-    options.callback = function cb(err, model, resp){
+    options.callback = function cb(err, model, response){
       if (err){
-        return callback(err, model, resp, options);
+        return callback(err, model, response, options);
       }
       if (options.wait){
         collection.add(model, options);
       }
-      callback(null, model, resp, options);
+      callback(null, model, response, options);
     };
 
     model.save(null, options);
@@ -159,9 +155,9 @@ var IOMixin = AmpersandIO.extend({
 
 // Aux func used to trigger errors if they exist and use the optional
 // callback function if given
-var callback = function(err, model, resp, options){
+var callback = function(err, model, response, options){
   if (options.cb){
-    options.cb(model, resp);
+    options.cb(model, response);
   }
   if (err){
     model.trigger('error', model, err, options);
