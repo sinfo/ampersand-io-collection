@@ -3,20 +3,22 @@ var extend = require('extend-object');
 var AmpersandCollection = require('ampersand-collection');
 var AmpersandIO = require('ampersand-io');
 
+var events = {
+  fetch: 'collection-fetch',
+  onFetch: 'collection-fetch-response',
+  onUpdate: 'on-model-update',
+  onNew: 'on-model-new'
+};
+
 function AmpersandIOCollection(attrs, options){
   options || (options = {});
   Base.call(this, attrs, options);
-  IOMixin.call(this, options.socket, options);
+  AmpersandIO.call(this, options.socket, options);
 }
 
 var IOMixin = AmpersandIO.extend({
 
-  events: {
-    fetch: 'collection-fetch',
-    onFetch: 'on-collection-fetch',
-    onUpdate: 'on-model-update',
-    onNew: 'on-model-new'
-  },
+  events: events,
 
   listeners: {
     onUpdate:{ 
@@ -171,7 +173,7 @@ var callback = function(err, model, response, options){
 
 var Base = AmpersandCollection.extend();
 AmpersandIOCollection.prototype = Object.create(Base.prototype);
-extend(AmpersandIOCollection.prototype, Object.create(IOMixin.prototype));
+extend(AmpersandIOCollection.prototype, IOMixin.prototype);
 AmpersandIOCollection.extend = Base.extend;
 
 module.exports = AmpersandIOCollection;

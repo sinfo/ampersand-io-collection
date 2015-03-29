@@ -29,7 +29,7 @@ io.on('connection', function(socket){
 
 	socket.on('collection-fetch', function(data, cb){
 		console.log(data);
-		socket.emit('fetch-response', {test: 'test'}, function(){console.log('done');});
+		socket.emit('collection-fetch-response', {test: 'test'}, function(){console.log('done');});
 		cb();
 	});
 });
@@ -41,7 +41,8 @@ var mymodel =  IOModel.extend({props: {
   source: ['string'],
   member: ['string']
 }});
-var mycollection = new ((AmpersandCollection.extend(new IOCollection())).extend({model: mymodel}))();
+
+var mycollection = new (IOCollection.extend({model: mymodel}))({}, {socket: 'http://localhost:3000'});
 console.log(mycollection);
 mycollection.setListeners();
 mycollection.fetch({wait: true});
