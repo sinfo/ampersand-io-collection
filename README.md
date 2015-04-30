@@ -15,7 +15,6 @@ See also the [ampersand-io](https://github.com/sinfo/ampersand-io) documentation
 
 ## Installing
 
-```
 npm install ampersand-io-collection
 ```
 
