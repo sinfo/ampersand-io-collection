@@ -52,22 +52,20 @@ var IOMixin = AmpersandIO.extend({
 
     options.cb = options.callback;
     options.callback = function (err, response){
-      if (err){
-        collection.trigger('error', this, response, options);
-      }
+      callback(err, collection, response, options);
     };
 
     options.respCallback = function cb(data, cbServer){
       var method = options.reset ? 'reset' : 'set';
+      collection.removeListeners([collection.events.onFetch]);
+      if(cbServer){
+        cbServer();
+      }
       if(data.err){
         return callback(data.err, collection, data, options);
       }
       collection[method](data.response, options);
       callback(data.err, collection, data, options);
-      collection.removeListeners([collection.events.onFetch]);
-      if(cbServer){
-        cbServer();
-      }
     };
 
     listenerKey = this.events.onFetch;
@@ -164,10 +162,10 @@ var IOMixin = AmpersandIO.extend({
 // callback function if given
 var callback = function(err, model, response, options){
   if (options.cb){
-    options.cb(model, response);
+    options.cb(err, model, response);
   }
   if (err){
-    model.trigger('error', model, err, options);
+    model.trigger('error', err, model, options);
   }
 };
 
