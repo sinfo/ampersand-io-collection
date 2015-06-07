@@ -1,6 +1,6 @@
 {
   "name": "ampersand-io-collection",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "ampersand collection mixin based on rest collection mixin to be used with socket.io",
   "main": "ampersand-io-collection.js",
   "scripts": {
