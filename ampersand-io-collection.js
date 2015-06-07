@@ -53,7 +53,7 @@ var IOMixin = AmpersandIO.extend({
     options.cb = options.callback;
     options.callback = function (err, response){
       if (err){
-        this.trigger('error', this, response, options);
+        collection.trigger('error', this, response, options);
       }
     };
 
